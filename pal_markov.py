@@ -10,6 +10,8 @@
     aleatoriamente según el peso de cada palabra siguiente.
 """
 
+
+import random
 texto = "I am, subscribed to Y-Cubed and I am 123 loving678 it."
 texto = "I am, subscribed to Y Cubed and I am 123 loving678 it."
 # Quitar los separadores: , . : ; ...
@@ -27,7 +29,6 @@ for pal in texto.split():
                 break
     if pal == "":
         continue
-    # print(pal.isalpha(), pal.lower())
 
     if pal not in palabras:
         palabras[pal] = {}
@@ -43,3 +44,30 @@ for pal in texto.split():
     anterior = pal
 
 print(palabras)
+
+# Elegir una palabra y seguir el grafo
+print("Palabras disponibles")
+for pal in palabras:
+    print(pal, end=" ")
+print()
+inicio = input("Escriba la palabra por la que comenzar: ")
+
+print(inicio, end=" ")
+pal = inicio
+while True:
+    peso_total = 0
+    pal_sig = {}
+    for siguiente, peso in palabras[pal].items():
+        peso_total += peso
+        pal_sig[peso_total] = siguiente
+    if peso_total == 0:
+        break
+
+    peso_sig = random.randint(1, peso_total)
+    for peso in sorted(pal_sig.keys()):
+        if peso_sig <= peso:
+            pal = pal_sig[peso]
+            print(pal_sig[peso], end=" ")
+            break
+
+print()
