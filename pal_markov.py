@@ -13,7 +13,14 @@ import random
 """
 
 
-def leer_texto(texto):
+def crear_texto(fichero):
+    """Crear 'texto' a partir de un fichero"""
+    with open(fichero, encoding="utf-8") as f:
+        read_data = f.read()
+    return read_data
+
+
+def crear_dict_palabras(texto):
     """Leer texto"""
 
     # Quitar los separadores: , . : ; ...
@@ -85,6 +92,8 @@ def escibir_grafo(inicio):
 texto = "I am, subscribed to Y-Cubed and I am 123 loving678 it."
 texto = "I am, subscribed to Y Cubed and I am 123 loving678 it."
 
-palabras = leer_texto(texto)
+fichero = "el_quijote.txt"
+texto = crear_texto(fichero)
+palabras = crear_dict_palabras(texto)
 inicio = elegir_palabra(palabras)
 escibir_grafo(inicio)
