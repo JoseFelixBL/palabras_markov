@@ -17,9 +17,9 @@ También falta ordenar mejor el código actual.
 Refactoring inicial hecho.
 
 Mejoras propuestas:
-- Leer frases desde un fichero.
-- Agregar inicios de frase en lista de palabras para elegir el inicio aleatoriamente.
-- Dejar los puntos al final de la frase para marcar finales de frase.
+- Leer frases desde un fichero. -->2024-02-29 ¡Hecho!
+- Agregar inicios de frase en lista de palabras para elegir el inicio aleatoriamente. -->2024-02-29 ¡Hecho!
+- Dejar los puntos al final de la frase para marcar finales de frase. -->2024-02-29 ¡Hecho!
 - Estudiar si dejamos ',' ':', y otros signos de puntuación.
 - Agregar cuántas frases queremos sacar.
 - Leer desde fichero .env el texto a leer y/o los separadores a omitir.

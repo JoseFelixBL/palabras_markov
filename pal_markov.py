@@ -12,6 +12,9 @@ import random
     aleatoriamente según el peso de cada palabra siguiente.
 """
 
+INICIO_FRASE = "_INICIO_FRASE_"
+FINAL_FRASE = "_FINAL_FRASE_"
+
 
 def crear_texto(fichero):
     """Crear 'texto' a partir de un fichero"""
@@ -23,18 +26,27 @@ def crear_texto(fichero):
 def crear_dict_palabras(texto):
     """Leer texto"""
 
+    def agrega_a_palabra_anterior():
+        """Exactamente eso"""
+        if pal not in palabras[anterior]:
+            palabras[anterior][pal] = 0
+        palabras[anterior][pal] += 1
+
     # Quitar los separadores: , . : ; ...
-    separadores = ".:,;¡¿!?()[]{}ªº0123456789-_"
+    # separadores = ".:,;¡¿!?()[]{}ªº0123456789-_"
+    sep_sin_punto = ":,;¡¿!?()[]{}ªº0123456789-_"
 
     palabras = {}
-    anterior = ""
+    palabras[INICIO_FRASE] = {}
+    palabras[FINAL_FRASE] = {}
+    anterior = INICIO_FRASE
     # Las palabras compuestas separadas por "-" quedan unidas...
     for pal in texto.split():
         if not pal.isalpha():
-            for char in separadores:
+            for char in sep_sin_punto:
                 nueva_pal = pal.replace(char, "")
                 pal = nueva_pal
-                if pal.isalpha() or pal == "":
+                if pal.isalpha() or pal == "" or pal.strip(".").isalpha():
                     break
         if pal == "":
             continue
@@ -42,15 +54,21 @@ def crear_dict_palabras(texto):
         if pal not in palabras:
             palabras[pal] = {}
 
-        if anterior == "":
+        # if anterior == "":
+        #     anterior = pal
+        #     continue
+
+        agrega_a_palabra_anterior()
+
+        # Si es final de frase...
+        if not pal.isalpha() and pal.strip(".").isalpha():
             anterior = pal
-            continue
+            pal = FINAL_FRASE
+            agrega_a_palabra_anterior()
+            anterior = INICIO_FRASE
+        else:
+            anterior = pal
 
-        if pal not in palabras[anterior]:
-            palabras[anterior][pal] = 0
-        palabras[anterior][pal] += 1
-
-        anterior = pal
     return palabras
 
 
@@ -66,34 +84,43 @@ def elegir_palabra(palabras):
             return pal
 
 
-def escibir_grafo(inicio):
-    """Esribir grafo a partir de palabra de inicio"""
-    print(inicio, end=" ")
-    pal = inicio
-    while True:
-        peso_total = 0
-        pal_sig = {}
-        for siguiente, peso in palabras[pal].items():
-            peso_total += peso
-            pal_sig[peso_total] = siguiente
-        if peso_total == 0:
-            break
+def elegir_inicio(palabras):
+    pass
 
-        peso_sig = random.randint(1, peso_total)
-        for peso in sorted(pal_sig.keys()):
-            if peso_sig <= peso:
-                pal = pal_sig[peso]
-                print(pal_sig[peso], end=" ")
+
+# def escibir_grafo(inicio):
+def escibir_grafo():
+    """Esribir grafo a partir de palabra de inicio"""
+    # print(inicio, end=" ")
+    # pal = inicio
+    for _ in range(3):
+        pal = INICIO_FRASE
+        while True:
+            peso_total = 0
+            pal_sig = {}
+            for siguiente, peso in palabras[pal].items():
+                peso_total += peso
+                pal_sig[peso_total] = siguiente
+            if peso_total == 0 or siguiente == FINAL_FRASE:
                 break
 
-    print()
+            peso_sig = random.randint(1, peso_total)
+            for peso_pal in sorted(pal_sig.keys()):
+                if peso_sig <= peso_pal:
+                    pal = pal_sig[peso_pal]
+                    print(pal_sig[peso_pal], end=" ")
+                    break
+
+        print()
 
 
 texto = "I am, subscribed to Y-Cubed and I am 123 loving678 it."
-texto = "I am, subscribed to Y Cubed and I am 123 loving678 it."
+texto = "I am, subscribed to Y Cubed. and I am 123 loving678 it."
 
 fichero = "el_quijote.txt"
 texto = crear_texto(fichero)
 palabras = crear_dict_palabras(texto)
-inicio = elegir_palabra(palabras)
-escibir_grafo(inicio)
+# print(palabras[FINAL_FRASE])
+# inicio = elegir_palabra(palabras)
+# escibir_grafo(INICIO_FRASE)
+escibir_grafo()
