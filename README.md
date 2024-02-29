@@ -12,3 +12,14 @@ La idea es poder leer textos como "El Quijote" para luego crear otros textos.
 Falta marcar los inicios y finales de oraciones y elegir cuantas frases crear.
 
 También falta ordenar mejor el código actual.
+
+2024-02-29: 
+Refactoring inicial hecho.
+
+Mejoras propuestas:
+- Leer frases desde un fichero.
+- Agregar inicios de frase en lista de palabras para elegir el inicio aleatoriamente.
+- Dejar los puntos al final de la frase para marcar finales de frase.
+- Estudiar si dejamos ',' ':', y otros signos de puntuación.
+- Agregar cuántas frases queremos sacar.
+- Leer desde fichero .env el texto a leer y/o los separadores a omitir.
