@@ -1,4 +1,8 @@
+"""
+Palabras de markov
+"""
 import random
+import re
 
 """Palabras de Markov"""
 
@@ -89,7 +93,7 @@ def elegir_inicio(palabras):
 
 
 # def escibir_grafo(inicio):
-def escibir_grafo():
+def escibir_grafo(palabras):
     """Esribir grafo a partir de palabra de inicio"""
     # print(inicio, end=" ")
     # pal = inicio
@@ -114,13 +118,19 @@ def escibir_grafo():
         print()
 
 
-texto = "I am, subscribed to Y-Cubed and I am 123 loving678 it."
-texto = "I am, subscribed to Y Cubed. and I am 123 loving678 it."
+def programa_principal():
+    """Programa principal"""
+    texto = "I am, subscribed to Y-Cubed and I am 123 loving678 it."
+    texto = "I am, subscribed to Y Cubed. and I am 123 loving678 it."
 
-fichero = "el_quijote.txt"
-texto = crear_texto(fichero)
-palabras = crear_dict_palabras(texto)
-# print(palabras[FINAL_FRASE])
-# inicio = elegir_palabra(palabras)
-# escibir_grafo(INICIO_FRASE)
-escibir_grafo()
+    fichero = "el_quijote.txt"
+    texto = crear_texto(fichero)
+    palabras = crear_dict_palabras(texto)
+    # print(palabras[FINAL_FRASE])
+    # inicio = elegir_palabra(palabras)
+    # escibir_grafo(INICIO_FRASE)
+    escibir_grafo(palabras)
+
+
+if __name__ == "__main__":
+    programa_principal()
