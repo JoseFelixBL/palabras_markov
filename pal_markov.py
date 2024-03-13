@@ -30,11 +30,65 @@ def crear_texto(fichero):
 def crear_dict_palabras(texto):
     """Leer texto"""
 
-    def agrega_a_palabra_anterior():
+    def agrega_a_palabra_anterior(pal, anterior):
         """Exactamente eso"""
         if pal not in palabras[anterior]:
             palabras[anterior][pal] = 0
         palabras[anterior][pal] += 1
+
+    def separar_palabras_str(anterior):
+        """Separar palabras usando métodos de string"""
+        # Las palabras compuestas separadas por "-" quedan unidas...
+        for pal in texto.split():
+            if not pal.isalpha():
+                for char in sep_sin_punto:
+                    nueva_pal = pal.replace(char, "")
+                    pal = nueva_pal
+                    if pal.isalpha() or pal == "" or pal.strip(".").isalpha():
+                        break
+            if pal == "":
+                continue
+
+            if pal not in palabras:
+                palabras[pal] = {}
+
+            # if anterior == "":
+            #     anterior = pal
+            #     continue
+
+            agrega_a_palabra_anterior(pal, anterior)
+
+            # Si es final de frase...
+            if not pal.isalpha() and pal.strip(".").isalpha():
+                anterior = pal
+                pal = FINAL_FRASE
+                agrega_a_palabra_anterior(pal, anterior)
+                anterior = INICIO_FRASE
+            else:
+                anterior = pal
+
+    def separar_palabras_re(anterior):
+        """Separar palabras usando métodos de re"""
+        # patron = re.compile('[\\w.,]*[^\s,]')
+        patron = re.compile(r'[\w.,]*[^\s:,;¡¿!?()[\]{}ªº0123456789-]')
+        pal_sin_punto = re.compile(r'.*[^.]$')
+
+        for obj_match in patron.finditer(texto):
+            pal = obj_match.group()
+            if pal not in palabras:
+                palabras[pal] = {}
+
+            agrega_a_palabra_anterior(pal, anterior)
+
+            # Si es final de frase - tiene punto...
+            obj_2 = pal_sin_punto.search(pal)
+            if obj_2 is None:
+                anterior = pal
+                pal = FINAL_FRASE
+                agrega_a_palabra_anterior(pal, anterior)
+                anterior = INICIO_FRASE
+            else:
+                anterior = pal
 
     # Quitar los separadores: , . : ; ...
     # separadores = ".:,;¡¿!?()[]{}ªº0123456789-_"
@@ -44,35 +98,9 @@ def crear_dict_palabras(texto):
     palabras[INICIO_FRASE] = {}
     palabras[FINAL_FRASE] = {}
     anterior = INICIO_FRASE
-    # Las palabras compuestas separadas por "-" quedan unidas...
-    for pal in texto.split():
-        if not pal.isalpha():
-            for char in sep_sin_punto:
-                nueva_pal = pal.replace(char, "")
-                pal = nueva_pal
-                if pal.isalpha() or pal == "" or pal.strip(".").isalpha():
-                    break
-        if pal == "":
-            continue
 
-        if pal not in palabras:
-            palabras[pal] = {}
-
-        # if anterior == "":
-        #     anterior = pal
-        #     continue
-
-        agrega_a_palabra_anterior()
-
-        # Si es final de frase...
-        if not pal.isalpha() and pal.strip(".").isalpha():
-            anterior = pal
-            pal = FINAL_FRASE
-            agrega_a_palabra_anterior()
-            anterior = INICIO_FRASE
-        else:
-            anterior = pal
-
+    # separar_palabras_str(anterior)
+    separar_palabras_re(anterior)
     return palabras
 
 
@@ -88,8 +116,8 @@ def elegir_palabra(palabras):
             return pal
 
 
-def elegir_inicio(palabras):
-    pass
+# def elegir_inicio(palabras):
+#     pass
 
 
 # def escibir_grafo(inicio):
