@@ -39,6 +39,10 @@ def crear_dict_palabras(texto):
     def separar_palabras_str(anterior):
         """Separar palabras usando métodos de string"""
         # Las palabras compuestas separadas por "-" quedan unidas...
+        # Quitar los separadores: , . : ; ...
+        # separadores = ".:,;¡¿!?()[]{}ªº0123456789-_"
+        sep_sin_punto = ":,;¡¿!?()[]{}ªº0123456789-_"
+
         for pal in texto.split():
             if not pal.isalpha():
                 for char in sep_sin_punto:
@@ -69,12 +73,11 @@ def crear_dict_palabras(texto):
 
     def separar_palabras_re(anterior):
         """Separar palabras usando métodos de re"""
-        # patron = re.compile('[\\w.,]*[^\s,]')
-        patron = re.compile(r'[\w.,]*[^\s:,;¡¿!?()[\]{}ªº0123456789-]')
+        # patron_split = re.compile(r'\W')
+        patron_split = re.compile(r'[^\w.]')
         pal_sin_punto = re.compile(r'.*[^.]$')
 
-        for obj_match in patron.finditer(texto):
-            pal = obj_match.group()
+        for pal in patron_split.split(texto):
             if pal not in palabras:
                 palabras[pal] = {}
 
@@ -89,10 +92,6 @@ def crear_dict_palabras(texto):
                 anterior = INICIO_FRASE
             else:
                 anterior = pal
-
-    # Quitar los separadores: , . : ; ...
-    # separadores = ".:,;¡¿!?()[]{}ªº0123456789-_"
-    sep_sin_punto = ":,;¡¿!?()[]{}ªº0123456789-_"
 
     palabras = {}
     palabras[INICIO_FRASE] = {}
@@ -152,6 +151,7 @@ def programa_principal():
     texto = "I am, subscribed to Y Cubed. and I am 123 loving678 it."
 
     fichero = "el_quijote.txt"
+    # fichero = "prueba.txt"
     texto = crear_texto(fichero)
     palabras = crear_dict_palabras(texto)
     # print(palabras[FINAL_FRASE])
